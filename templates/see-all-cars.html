@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "header.html" %}
+
+<body>
+  {% include "navigation.html" %}
+
+  <div class="container">
+    <div class="row">
+    {% for id, car in cars %}
+      <div class="col-md-4">
+        <div class="thumbnail">
+          <img src="/static/images/car2.jpeg" alt="Nature" style="width:100%">
+          <div class="caption">
+            <div><b>Model</b>: {{ car['model'] }}</div>
+            <div><b>Brand</b>: {{ car['brand'] }}</div>
+            <div><b>Year</b>: {{ car['year'] }}</div>
+            <div><b>Price</b>: {{ car['price'] }}</div>
+            <div><b>Color</b>: {{ car['color'] }}</div>
+            <br />
+            <a href="#" type="button" class="btn btn-primary">Edit</a>
+            <a href="/delete-car/{{ id }}" "button" class="btn btn-danger">Delete</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+</body>
+
+</html>
