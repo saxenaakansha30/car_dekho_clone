@@ -7,14 +7,15 @@ from database import cars
 from starlette.responses import HTMLResponse
 from starlette.status import HTTP_400_BAD_REQUEST
 from typing import Optional
+from fastapi.encoders import jsonable_encoder
 
 templates = Jinja2Templates(directory="templates")
 
 class Car(BaseModel):
   brand: Optional[str]
   model: Optional[str]
-  year: Optional[str]
-  price: Optional[str]
+  year: Optional[int]
+  price: Optional[int]
   color: Optional[str]
 
 app = FastAPI()
@@ -50,15 +51,15 @@ def get_car(request: Request, id: int):
 def add_car(
   brand: Optional[str] = Form(...),
   model: Optional[str] = Form(...),
-  year: Optional[str] = Form(...),
-  price: Optional[str] = Form(...),
+  year: Optional[int] = Form(...),
+  price: Optional[int] = Form(...),
   color: Optional[str] = Form(...),
   ):
   body_car = [Car(brand=brand, model=model, year=year, price=price, color=color)]
   if (len(body_car) < 1):
     raise HTTPException(status_code=HTTP_400_BAD_REQUEST, default="No cars to add.")
   min_id = len(cars) + 1
-  cars[min_id] = body_car
+  cars[min_id] = jsonable_encoder(body_car[0])
 
   return RedirectResponse(url="/cars", status_code = 302)
 
@@ -68,8 +69,8 @@ def update_car(
   id: int,
   brand: Optional[str] = Form(...),
   model: Optional[str] = Form(...),
-  year: Optional[str] = Form(...),
-  price: Optional[str] = Form(...),
+  year: Optional[int] = Form(...),
+  price: Optional[int] = Form(...),
   color: Optional[str] = Form(...),
 ):
   stored = cars[id]
@@ -77,8 +78,8 @@ def update_car(
   if not stored:
     raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="The car does not exist")
 
-  body_car = [Car(brand=brand, model=model, year=year, price=price, color=color)]
-  cars[id] = body_car
+  body_car = Car(brand=brand, model=model, year=year, price=price, color=color)
+  cars[id] = jsonable_encoder(body_car)
 
   return RedirectResponse(url="/cars", status_code = 302)
 
