@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "header.html" %}
+
+<body>
+  {% include "navigation.html" %}
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="thumbnail">
+          <img src="/static/images/car2.jpeg" alt="Nature" style="width:100%">
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="thumbnail">
+          <div class="caption">
+            <div><b>Name</b>: {{ user['name'] }}</div>
+            <div><b>Email</b>: {{ user['email'] }}</div>
+            <div><b>Birthday</b>: {{ user['birthday'] }}</div>
+            <div><b>Friends</b>: {{ user['friends']|join(', ') }}</div>
+            <div><b>Notifications</b>:</div>
+              <ul class="list-group">
+                {% for notification in user['notifications'] %}
+                  <li class="list-group-item">
+                    <div>From: {{ notification['author'] }}</div>
+                    <div>Message: {{ notification['description'] }}</div>
+                  </li>
+                {% endfor %}
+              </ul>
+          </div>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+</body>
+
+</html>
